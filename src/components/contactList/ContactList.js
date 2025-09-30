@@ -4,7 +4,7 @@ import getTemplate from "./template";
 export default class ContactList {
   constructor(data) {
     this.domElt = document.querySelector(data.el);
-    this.listDomElt=null;
+    this.listDomElt = null;
     DB.setApiURL(data.apiURL);
     this.contacts = [];
     this.loadContacts();
@@ -24,10 +24,8 @@ export default class ContactList {
   }
   render() {
     this.domElt.innerHTML = getTemplate();
-    this.listDomElt=this.domElt.querySelector(".contact-list");
-    this.contacts.forEach((contact) =>
-      contact.render(this.listDomElt)
-    );
+    this.listDomElt = this.domElt.querySelector(".contact-list");
+    this.contacts.forEach((contact) => contact.render(this.listDomElt));
     this.renderItemsCount();
     this.initEvents();
   }
@@ -39,7 +37,15 @@ export default class ContactList {
     this.contacts.push(newContact);
     //Ajouter dans le dom
     newContact.render(this.domElt.querySelector(".contact-list"));
-    //relancer le renderItemsCount()
+    //Relancer le renderItemsCount()
+    this.renderItemsCount();
+  }
+  async deleteOneById(id) {
+    //Supprimer de la DB
+    const resp = await DB.deleteOneById(id);
+    //Supprimer des todos
+    this.contacts = this.contacts.filter(contact => contact.id !== id);
+    //Relancer le renderItemsLeftCount()
     this.renderItemsCount();
   }
   initEvents() {

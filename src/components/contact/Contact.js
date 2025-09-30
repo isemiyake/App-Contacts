@@ -1,3 +1,4 @@
+import DB from "../../DB";
 import getTemplate from "./template";
 export default class Contact {
   constructor(data) {
@@ -12,5 +13,12 @@ export default class Contact {
     template.innerHTML = getTemplate(this);
     this.domElt = template.content.firstElementChild;
     el.append(this.domElt);
+    this.initEvents();
+  }
+  initEvents() {
+    this.domElt.querySelector(".destroy").addEventListener("click", () => {
+      window.ContactList.deleteOneById(this.id);
+      this.domElt.remove();
+    }); 
   }
 }
