@@ -14,10 +14,18 @@ export default class ContactList {
     console.table(this.contacts);
     this.render();
   }
+  getItemsCount() {
+    return this.contacts.length;
+  }
+  renderItemsCount() {
+    this.domElt.querySelector(".contacts-count").innerText =
+      this.getItemsCount();
+  }
   render() {
     this.domElt.innerHTML = getTemplate();
     this.contacts.forEach((contact) =>
       contact.render(this.domElt.querySelector(".contact-list"))
     );
+    this.renderItemsCount();
   }
 }
