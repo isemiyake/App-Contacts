@@ -24,4 +24,13 @@ export default class DB {
       });
     return response.json();
   }
+  static async update(contact, data) {
+    const response = await fetch(this.apiURL + "contacts/" + contact.id, {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data),
+    });
+
+    return response.json();
+  }
 }

@@ -22,6 +22,11 @@ export default class ContactList {
     this.domElt.querySelector(".contacts-count").innerText =
       this.getItemsCount();
   }
+  resetForm() {
+  this.domElt.querySelector(".firstName").value = "";
+  this.domElt.querySelector(".lastName").value = "";
+  this.domElt.querySelector(".eMail").value = "";
+}
   render() {
     this.domElt.innerHTML = getTemplate();
     this.listDomElt = this.domElt.querySelector(".contact-list");
@@ -61,7 +66,9 @@ export default class ContactList {
         alert("L'email doit contenir un '@'.");
         return;
       }
+      this.resetForm();
       this.addContact({ firstName, lastName, eMail });
     });
   }
+  
 }
