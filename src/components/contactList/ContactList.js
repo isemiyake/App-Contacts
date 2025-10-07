@@ -12,21 +12,8 @@ export default class ContactList {
   async loadContacts() {
     const contacts = await DB.findAll();
     this.contacts = contacts.map((contact) => new Contact(contact));
-    console.table(this.contacts);
     this.render();
   }
-  getItemsCount() {
-    return this.contacts.length;
-  }
-  renderItemsCount() {
-    this.domElt.querySelector(".contacts-count").innerText =
-      this.getItemsCount();
-  }
-  resetForm() {
-  this.domElt.querySelector(".firstName").value = "";
-  this.domElt.querySelector(".lastName").value = "";
-  this.domElt.querySelector(".eMail").value = "";
-}
   render() {
     this.domElt.innerHTML = getTemplate();
     this.listDomElt = this.domElt.querySelector(".contact-list");
@@ -34,6 +21,20 @@ export default class ContactList {
     this.renderItemsCount();
     this.initEvents();
   }
+ 
+  renderItemsCount() {
+    this.domElt.querySelector(".contacts-count").innerText =
+      this.getItemsCount();
+  }
+   getItemsCount() {
+    return this.contacts.length;
+  }
+  resetForm() {
+  this.domElt.querySelector(".firstName").value = "";
+  this.domElt.querySelector(".lastName").value = "";
+  this.domElt.querySelector(".eMail").value = "";
+}
+  
   async addContact(data) {
     //Ajouter a la DB
     const contact = await DB.create(data);
@@ -48,7 +49,7 @@ export default class ContactList {
   async deleteOneById(id) {
     //Supprimer de la DB
     const resp = await DB.deleteOneById(id);
-    //Supprimer des todos
+    //Supprimer des contacts
     this.contacts = this.contacts.filter(contact => contact.id !== id);
     //Relancer le renderItemsLeftCount()
     this.renderItemsCount();

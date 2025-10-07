@@ -19,28 +19,26 @@ export default class Contact {
   }
 
   initEvents() {
-    // Événement pour supprimer un contact
+    // Supprimer un contact
     this.domElt.querySelector(".destroy").addEventListener("click", () => {
       window.ContactList.deleteOneById(this.id);
       this.domElt.remove();
     });
 
-    // Événement pour entrer en mode édition
+    // Mode édition
     this.domElt.querySelector(".btn-edit").addEventListener("click", () => {
       this.domElt.classList.add("isEditing");
     });
 
-    // Événement pour valider les modifications
+    // Valider des modifications
     this.domElt.querySelector(".btn-check").addEventListener("click", () => {
       const updatedData = this.collectUpdatedData();
 
       // Validation de l'email
-      if (!this.isEmailValid(updatedData.eMail)) {
+      if (!updatedData.eMail.includes("@")) {
         alert("L'email doit être valide.");
         return;
       }
-
-      // Appel de la méthode update pour appliquer les modifications
       this.update(updatedData);
     });
   }
@@ -53,31 +51,23 @@ export default class Contact {
     };
   }
 
-  isEmailValid(email) {
-    return email.includes("@");
-  }
+
 
   update(data) {
-    // Mise à jour des données locales
+    // Update des données locales
     this.firstName = data.firstName;
     this.lastName = data.lastName;
     this.eMail = data.eMail;
 
-    // Mise à jour de l'affichage
+    // Update du domElt
     this.domElt.querySelector(".first-name").innerText = data.firstName;
     this.domElt.querySelector(".last-name").innerText = data.lastName;
     this.domElt.querySelector(".e-mail").innerText = data.eMail;
 
-    // Passer en mode non-édition
+    // Retirer le isEditing du tr
     this.domElt.classList.remove("isEditing");
 
-    // Mise à jour dans la base de données via PUT
-    DB.update(this, data)
-      .then((updatedContact) => {
-        console.log("Contact mis à jour :", updatedContact);
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la mise à jour :", error);
-      });
+    // Put dans la DB
+    DB.update(this, data);
   }
 }
